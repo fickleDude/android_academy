@@ -10,7 +10,7 @@ class MainActivity : AppCompatActivity(), PosterListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .add(R.id.fragments_container, FragmentMoviesList())
+            .add(R.id.fragments_container, FragmentMoviesListObserver())
             .commit()
 
 //        if (savedInstanceState == null) {
@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity(), PosterListener {
 
     }
 
-    override fun onButtonClickedSwitchToMovieDetails() {
+    override fun onPosterClickedSwitchToMovieDetails() {
             supportFragmentManager.beginTransaction()
                 .addToBackStack(null)
                 .replace(R.id.fragments_container, FragmentMoviesDetails())

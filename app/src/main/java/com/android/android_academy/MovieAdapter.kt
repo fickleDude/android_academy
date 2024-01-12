@@ -1,18 +1,14 @@
 package com.android.android_academy
 
-import android.content.Context
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.android.android_academy.data.models.Movie
-import com.android.android_academy.domain.MoviesDataSource
 
 class MovieAdapter():RecyclerView.Adapter<MovieViewHolder>()
  {
-     private var movies = listOf<Movie>()
+     private var movies = emptyList<Movie>()
 
     private var posterFragmentClickListener: PosterListener? = null
 
@@ -25,7 +21,7 @@ class MovieAdapter():RecyclerView.Adapter<MovieViewHolder>()
          posterFragmentClickListener = view.context as PosterListener
          view?.findViewById<View>(R.id.poster)?.apply {
              setOnClickListener{
-                 posterFragmentClickListener?.onButtonClickedSwitchToMovieDetails()
+                 posterFragmentClickListener?.onPosterClickedSwitchToMovieDetails()
              }
 
         }
