@@ -1,4 +1,4 @@
-package com.android.android_academy.data.models
+package com.android.android_academy.domain
 
 data class Movie(
     val tag: String,

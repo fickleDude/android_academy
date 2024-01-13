@@ -1,7 +1,5 @@
 package com.android.android_academy.domain
 
-import com.android.android_academy.data.models.Movie
-
 class MoviesDataSource {
     fun getMovies(): List<Movie> {
         return listOf(

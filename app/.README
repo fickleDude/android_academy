@@ -1,0 +1,20 @@
+search for details about the movie
+https://api.themoviedb.org/3/search/movie?query=Jack+Reacher&api_key=41c0155b0c46712bbcbc7650ea852494
+
+list popular movies
+https://api.themoviedb.org/3/movie/popular?api_key=41c0155b0c46712bbcbc7650ea852494&page=2
+
+MovieModel
+{
+    "id": 866398,
+    "overview": "One man’s campaign for vengeance takes on national stakes after he is revealed to be a former operative of a powerful and clandestine organization known as Beekeepers.",
+    "poster_path": "/A7EByudX0eOzlkQ2FIbogzyazm2.jpg",
+    "release_date": "2024-01-10",
+    "title": "The Beekeeper",
+    "vote_average": 7.45
+}
+
+list details about movie by movie id
+https://api.themoviedb.org/3/movie/343611?api_key=41c0155b0c46712bbcbc7650ea852494
+getting image
+https://api.themoviedb.org/3/movie/{movie_id}/images

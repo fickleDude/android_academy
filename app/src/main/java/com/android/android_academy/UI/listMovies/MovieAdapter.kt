@@ -1,12 +1,15 @@
-package com.android.android_academy
+package com.android.android_academy.UI.listMovies
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.android.android_academy.data.models.Movie
+import com.android.android_academy.R
+import com.android.android_academy.domain.Movie
 
-class MovieAdapter():RecyclerView.Adapter<MovieViewHolder>()
+
+class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewHolder>()
  {
      private var movies = emptyList<Movie>()
 
@@ -16,7 +19,8 @@ class MovieAdapter():RecyclerView.Adapter<MovieViewHolder>()
         return movies[position]
     }
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_holder_movie,
+         val view = LayoutInflater.from(parent.context).inflate(
+             R.layout.view_holder_movie,
              parent,false)
          posterFragmentClickListener = view.context as PosterListener
          view?.findViewById<View>(R.id.poster)?.apply {
@@ -33,7 +37,7 @@ class MovieAdapter():RecyclerView.Adapter<MovieViewHolder>()
      }
 
      override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-         holder.bind(getItem(position))
+         holder.bind(this.context, getItem(position))
      }
 
      fun bindMovies(newMovies: List<Movie>) {

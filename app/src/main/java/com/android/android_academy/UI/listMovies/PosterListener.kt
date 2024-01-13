@@ -1,4 +1,4 @@
-package com.android.android_academy
+package com.android.android_academy.UI.listMovies
 
 interface PosterListener {
     fun onPosterClickedSwitchToMovieDetails()
