@@ -1,60 +1,34 @@
 package com.android.android_academy.data.models
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+// serialization - converting object into json string (with Gson plugin)
+// deserialization - converting json string into object
 
-//Parcelable нужна для передачи сущности от одной активности к другой
-//@Parcelize явно описывает процесс сериализации без использования рефлексии, поэтому быстрее @Serializable
-
-//path http://www.omdbapi.com/?t=Jack Reacher&apikey=ada59da8
+//single movie request
+//path http://www.omdbapi.com/?apikey=ada59da8&s=Jack Reacher
 //JSON example
-//{
-//    "Title": "Jack Reacher",
-//    "Released": "21 Dec 2012",
-//    "Plot": "A homicide investigator digs deeper into a case involving a trained military sniper responsible for a mass shooting.",
-//    "Poster": "https://m.media-amazon.com/images/M/MV5BMTM1NjUxMDI3OV5BMl5BanBnXkFtZTcwNjg1ODM3OA@@._V1_SX300.jpg",
-//    "imdbRating": "7.0",
-//    "imdbID": "tt0790724"
-//}
-
-@Parcelize
-data class MovieModel(
-    val Title: String?,
-    val Poster: String?,
-    val Released: String?,
-    val imdbID: String?,
-    val imdbRating: String?,
-    val Plot: String?
-) : Parcelable {
+//    {
+//        "Title": "Jack Reacher",
+//        "Year": "2012",
+//        "imdbID": "tt0790724",
+//        "Type": "movie",
+//        "Poster": "https://m.media-amazon.com/images/M/MV5BMTM1NjUxMDI3OV5BMl5BanBnXkFtZTcwNjg1ODM3OA@@._V1_SX300.jpg"
+//    }
+@Serializable
+data class MovieModel (
+    @SerialName("Title")
+     private val Title : String,
+     @SerialName("Year")
+     private val Year : String,
+     @SerialName("imdbID")
+     private val imdbID : String,
+     @SerialName("Type")
+     private val Type : String,
+     @SerialName("Poster")
+     private val Poster : String
+){
     override fun toString(): String {
-        return "MovieModel(Title=$Title, Poster=$Poster, Released=$Released, imdbID=$imdbID, imdbRating=$imdbRating, Plot=$Plot)"
+        return "MovieModel(Title='$Title', Year='$Year', imdbID='$imdbID', Type='$Type', Poster='$Poster')"
     }
 }
-
-//если нужно специфически реализовать процесс сериализации/десериализации,без аннотации
-//пример boilerplate кода
-//{
-//    constructor(source: Parcel): this(
-//        source.readString(),
-//        source.readString(),
-//        source.readString(),
-//        source.readInt(),
-//        source.readFloat(),
-//        source.readString()
-//    )
-//
-//    companion object : Parceler<MovieModel> {
-//        override fun MovieModel.write(dest: Parcel, flags: Int)  = with(dest) {
-//            writeValue(title)
-//            writeString(poster_path)
-//            writeString(release_date)
-//            writeValue(movie_id)
-//            writeValue(vote_average)
-//            writeValue(movie_overview)
-//        }
-//
-//        override fun create(parcel: Parcel): MovieModel {
-//            return MovieModel(parcel)
-//        }
-//    }
-//}

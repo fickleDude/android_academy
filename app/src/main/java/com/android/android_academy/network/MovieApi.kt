@@ -1,10 +1,9 @@
 package com.android.android_academy.network
 
-import com.android.android_academy.data.models.MovieModel
+import com.android.android_academy.data.models.MovieDetailsModel
+import com.android.android_academy.data.models.MoviesSearchResponse
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface MovieApi {
@@ -12,7 +11,14 @@ interface MovieApi {
     @GET(".")
     fun searchForMovieDetails(
         @Query("apikey") apiKey :String,
-        @Query("t") movieTitle :String
-    ) : Call<MovieModel>
+        @Query("i") movieId :String
+    ) : Call<MovieDetailsModel>
+
+    //path http://www.omdbapi.com/?apikey=ada59da8&s=Jack Reacher
+    @GET(".")
+    fun searchForMoviesByTitle(
+        @Query("apikey") apiKey :String,
+        @Query("s") title :String
+    ) : Call<MoviesSearchResponse>
 
 }

@@ -1,11 +1,10 @@
 package com.android.android_academy
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.Toast
+import com.android.android_academy.data.models.MovieDetailsModel
 import com.android.android_academy.data.models.MovieModel
 import com.android.android_academy.data.models.MoviesSearchResponse
 import com.android.android_academy.network.Credentials
@@ -23,27 +22,28 @@ class TestRetrofit : AppCompatActivity() {
         val btn = findViewById<Button>(R.id.click)
         btn.apply {
             setOnClickListener {
-                getRetrofitResponse()
+       //         getMovieDetails("tt0790724")
+                getMovieSearchList("Jack Reacher")
             }
 
         }
         }
     }
 
-    private fun getRetrofitResponse() {
+    private fun getMovieDetails(id : String) {
         val movieApi : MovieApi = NetworkModule.getMovieApi()
-        val responseQueue : Call<MovieModel> = movieApi
+        val responseQueue : Call<MovieDetailsModel> = movieApi
             .searchForMovieDetails(
                 Credentials().getApiKey(),
-                "Jack Reacher"
+                id
             )
         Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
 
         //asynchronous call(non blocking)
-        responseQueue.enqueue(object : Callback<MovieModel>{
+        responseQueue.enqueue(object : Callback<MovieDetailsModel>{
             override fun onResponse(
-                call: Call<MovieModel>,
-                response: Response<MovieModel>
+                call: Call<MovieDetailsModel>,
+                response: Response<MovieDetailsModel>
             ) {
                 if(response.code() == 200){
                     Log.v("RETROFIT", "Retrofit response " + response.body().toString())
@@ -56,8 +56,46 @@ class TestRetrofit : AppCompatActivity() {
                     }
                 }
             }
+            override fun onFailure(call: Call<MovieDetailsModel>, t: Throwable) {
+                Log.v("RETROFIT", "Retrofit on failure response"+t.stackTraceToString())
+                t.printStackTrace()
+            }
 
-            override fun onFailure(call: Call<MovieModel>, t: Throwable) {
+        })
+    }
+
+    private fun getMovieSearchList(title : String){
+        val movieApi : MovieApi = NetworkModule.getMovieApi()
+        val responseQueue : Call<MoviesSearchResponse> = movieApi
+            .searchForMoviesByTitle(
+                Credentials().getApiKey(),
+                title
+            )
+        Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
+        responseQueue.enqueue(object : Callback<MoviesSearchResponse>{
+            override fun onResponse(
+                call: Call<MoviesSearchResponse>,
+                response: Response<MoviesSearchResponse>
+            ) {
+                if(response.code() == 200){
+                   // Log.v("RETROFIT", "Retrofit response " + response.body()?.getMovies().toString())
+                    Log.v("RETROFIT", "Retrofit response " + response.body().toString())
+                    val moviesSearch : MoviesSearchResponse = response.body()!!
+
+                    val movies : List<MovieModel> = response.body()?.getMovies() ?: emptyList()
+                    for(movie : MovieModel in movies){
+                        Log.v("RETROFIT", ("Movie Model ${movie.toString()}"))
+                    }
+                }else{
+                    try{
+                        Log.v("RETROFIT", "Retrofit error response " + response.message())
+                    }catch (e: IOException){
+                        e.printStackTrace()
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<MoviesSearchResponse>, t: Throwable) {
                 Log.v("RETROFIT", "Retrofit on failure response"+t.stackTraceToString())
                 t.printStackTrace()
             }
