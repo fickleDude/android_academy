@@ -6,10 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object NetworkModule {
 
-//    val client =  OkHttpClient.Builder()
-//        .addInterceptor(Acc)
-//        .build()
-
     private val retrofitBuilder = Retrofit.Builder()
         .baseUrl(Credentials().getBaseUrl())
         .addConverterFactory(GsonConverterFactory.create())

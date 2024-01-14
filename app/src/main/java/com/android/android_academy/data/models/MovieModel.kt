@@ -22,8 +22,8 @@ data class MovieModel(
     val Title: String?,
     val Poster: String?,
     val Released: String?,
-    val imdbID: Int,
-    val imdbRating: Float,
+    val imdbID: String?,
+    val imdbRating: String?,
     val Plot: String?
 ) : Parcelable {
     override fun toString(): String {

@@ -23,7 +23,6 @@ class TestRetrofit : AppCompatActivity() {
         val btn = findViewById<Button>(R.id.click)
         btn.apply {
             setOnClickListener {
-                //clicked(this.context)
                 getRetrofitResponse()
             }
 
@@ -35,10 +34,11 @@ class TestRetrofit : AppCompatActivity() {
         val movieApi : MovieApi = NetworkModule.getMovieApi()
         val responseQueue : Call<MovieModel> = movieApi
             .searchForMovieDetails(
-                "Jack Reacher",
-//                Credentials().getApiKey()
-//                "Bearer" + Credentials().getApiKey()
+                Credentials().getApiKey(),
+                "Jack Reacher"
             )
+        Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
+
         //asynchronous call(non blocking)
         responseQueue.enqueue(object : Callback<MovieModel>{
             override fun onResponse(
@@ -47,12 +47,10 @@ class TestRetrofit : AppCompatActivity() {
             ) {
                 if(response.code() == 200){
                     Log.v("RETROFIT", "Retrofit response " + response.body().toString())
-             //       println("Movie Model   " + response.body().toString())
-                    Log.v("RETROFIT", ("Movie Model Title " + response.body()?.Title) ?: "")
+                    Log.v("RETROFIT", ("Movie Model Title " + response.body()?.Title))
                 }else{
                     try{
                         Log.v("RETROFIT", "Retrofit error response " + response.message())
-//                        println("MoviesSearchResponse   " + response.errorBody().toString())
                     }catch (e: IOException){
                         e.printStackTrace()
                     }

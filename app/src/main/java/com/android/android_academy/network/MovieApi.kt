@@ -8,17 +8,11 @@ import retrofit2.http.Headers
 import retrofit2.http.Query
 
 interface MovieApi {
-    //path http://www.omdbapi.com/?t={movie title to search for}&apikey={api_key}
-//    @Headers({
-//        "Accept: */*",
-//        "Accept-Encoding: gzip, deflate, br",
-//        "User-Agent: com.android.android_academy"
-//    })
+    //path http://www.omdbapi.com/?apikey={api_key}&t={movie title to search for}
     @GET(".")
     fun searchForMovieDetails(
+        @Query("apikey") apiKey :String,
         @Query("t") movieTitle :String
-//        @Query("api_key") apiKey :String
-//        @Header("Authorization") authHeader : String
     ) : Call<MovieModel>
 
 }
