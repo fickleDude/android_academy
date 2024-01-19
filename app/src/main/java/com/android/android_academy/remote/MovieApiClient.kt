@@ -30,12 +30,12 @@ class MovieApiClient private constructor(){
     }
 
 //    implement search by title API
-    fun getMoviesSearchList(title : String){
+    fun getMoviesSearchList(title : String, pageNumber : String){
         if(moviesSearchListRunnable != null){
             moviesSearchListRunnable = null
         }
         //initialize runnable with correct title
-        moviesSearchListRunnable = RetrieveMoviesRunnable(title)
+        moviesSearchListRunnable = RetrieveMoviesRunnable(title, pageNumber)
         //new runnable thread (submit)
         val handler = AppExecutors.getInstance().networkIO().submit(moviesSearchListRunnable)
         //set timeout for execution method to avoid crushes (schedule)
@@ -45,18 +45,18 @@ class MovieApiClient private constructor(){
                 handler.cancel(true)
             }
 
-        }, 5000, TimeUnit.MICROSECONDS)
+        }, 3000, TimeUnit.MILLISECONDS)
     }
 
     //retrieve data from runnable class: search by title & search by id
-    inner class RetrieveMoviesRunnable(private val title : String) : Runnable {
+    inner class RetrieveMoviesRunnable(private val title : String, private val pageNumber : String) : Runnable {
 
         private var cancelRequest : Boolean = false
 
         override fun run() {
             //getting response objects
             try{
-                val response = getMovieSearchList(title).execute()
+                val response = getMovieSearchList(title, pageNumber).execute()
                 if (cancelRequest){
                     return
                 }
@@ -83,12 +83,13 @@ class MovieApiClient private constructor(){
         }
 
         //get response queue
-        private fun getMovieSearchList(title : String) : Call<MoviesSearchResponse>{
+        private fun getMovieSearchList(title : String, pageNumber : String) : Call<MoviesSearchResponse>{
             val movieApi : MovieApi = NetworkModule.getMovieApi()
             val responseQueue : Call<MoviesSearchResponse> = movieApi
                 .searchForMoviesByTitle(
                     Credentials().getApiKey(),
-                    title
+                    title,
+                    pageNumber
                 )
             Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
             return responseQueue

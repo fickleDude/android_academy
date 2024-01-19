@@ -32,7 +32,7 @@ class MovieRepository private constructor(){
     }
 
     //calling client api method on the background
-    fun searchMovieApi(title : String){
-        client.getMoviesSearchList(title)
+    fun searchMovieApi(title : String, pageNumber : String){
+        client.getMoviesSearchList(title, pageNumber)
     }
 }

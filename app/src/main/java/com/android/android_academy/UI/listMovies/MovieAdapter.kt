@@ -21,16 +21,18 @@ class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewH
         return movies[position]
     }
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
+         //identify correct view
          val view = LayoutInflater.from(parent.context).inflate(
-             R.layout.view_holder_movie,
+             R.layout.movie_list_item,
              parent,false)
-         posterFragmentClickListener = view.context as PosterListener
-         view?.findViewById<View>(R.id.poster)?.apply {
-             setOnClickListener{
-                 posterFragmentClickListener?.onPosterClickedSwitchToMovieDetails()
-             }
 
-        }
+//         posterFragmentClickListener = view.context as PosterListener
+//         view?.findViewById<View>(R.id.movie_img)?.apply {
+//             setOnClickListener{
+//                 posterFragmentClickListener?.onPosterClickedSwitchToMovieDetails()
+//             }
+//
+//        }
          return MovieViewHolder(view)
      }
 
@@ -43,7 +45,7 @@ class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewH
      }
 
      @SuppressLint("NotifyDataSetChanged")
-     fun bindMovies(newMovies: List<MovieModel>) {
+     fun setMovies(newMovies: List<MovieModel>) {
          movies = newMovies
          notifyDataSetChanged()
      }

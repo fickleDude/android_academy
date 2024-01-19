@@ -15,11 +15,12 @@ interface MovieApi {
         @Query("i") movieId :String
     ) : Call<MovieDetailsModel>
 
-    //path http://www.omdbapi.com/?apikey=ada59da8&s=Jack Reacher - GET MOVIES BY TITLE
+    //path http://www.omdbapi.com/?apikey=ada59da8&s=Jack Reacher - GET MOVIES BY TITLE&page=2
     @GET(".")
     fun searchForMoviesByTitle(
         @Query("apikey") apiKey :String,
-        @Query("s") title :String
+        @Query("s") title :String,
+        @Query("page") pageNumber :String
     ) : Call<MoviesSearchResponse>
 
 }

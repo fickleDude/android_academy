@@ -18,7 +18,7 @@ class MoviesListViewModel(
     }
 
     //calling repository method which calls client api method
-    fun searchMovieApi(title : String){
-        repository.searchMovieApi(title)
+    fun searchMovieApi(title : String, pageNumber : String){
+        repository.searchMovieApi(title, pageNumber)
     }
 }
