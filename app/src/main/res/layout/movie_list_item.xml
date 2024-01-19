@@ -3,15 +3,16 @@
 <!--layout_weight - назначает важность дочернего элемента,-->
 <!--weightSum(=100) -  распределение пространства между элементами в процентном соотношении-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="15dp">
 
 <!--    контейнер для других компонентов-->
 <!--    продвинутый FrameLayout, который позволяет создавать карточку с тенью и закруглёнными углами-->
     <androidx.cardview.widget.CardView
         android:layout_width="268dp"
-        android:layout_height="317dp"
+        android:layout_height="wrap_content"
         android:id="@+id/card_view"
         android:elevation="10dp">
         

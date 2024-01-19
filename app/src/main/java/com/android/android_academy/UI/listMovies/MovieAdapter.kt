@@ -8,14 +8,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.android_academy.R
 import com.android.android_academy.data.models.MovieModel
-import com.android.android_academy.domain.Movie
 
 
-class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewHolder>()
+class MovieAdapter(private val context: Context, private var clickListener : MovieListener):RecyclerView.Adapter<MovieViewHolder>()
  {
      private var movies = emptyList<MovieModel>()
 
-    private var posterFragmentClickListener: PosterListener? = null
+//    private var posterFragmentOnMovieListener: onMovieListener? = null
 
     private fun getItem(position:Int): MovieModel {
         return movies[position]
@@ -26,14 +25,14 @@ class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewH
              R.layout.movie_list_item,
              parent,false)
 
-//         posterFragmentClickListener = view.context as PosterListener
+//         posterFragmentOnMovieListener = view.context as onMovieListener
 //         view?.findViewById<View>(R.id.movie_img)?.apply {
 //             setOnClickListener{
-//                 posterFragmentClickListener?.onPosterClickedSwitchToMovieDetails()
+//                 posterFragmentOnMovieListener?.onPosterClickedSendId()
 //             }
 //
 //        }
-         return MovieViewHolder(view)
+         return MovieViewHolder(view, clickListener)
      }
 
      override fun getItemCount(): Int {
@@ -49,5 +48,6 @@ class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewH
          movies = newMovies
          notifyDataSetChanged()
      }
+
 
  }

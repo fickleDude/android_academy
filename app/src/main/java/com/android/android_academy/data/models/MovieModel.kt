@@ -28,6 +28,9 @@ data class MovieModel (
      @SerialName("Poster")
      private val Poster : String
 ){
+    fun getId() : String{
+        return imdbID
+    }
     fun getTitle() : String{
         return Title
     }
