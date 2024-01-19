@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 //@Parcelize явно описывает процесс сериализации без использования рефлексии, поэтому быстрее @Serializable
 
 //path http://www.omdbapi.com/?i=tt0790724&apikey=ada59da8
-//search for movie bi id
+//search for movie with id
 //JSON example
 //{
 //    "Title": "Jack Reacher",

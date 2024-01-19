@@ -7,9 +7,9 @@ import android.widget.Button
 import com.android.android_academy.data.models.MovieDetailsModel
 import com.android.android_academy.data.models.MovieModel
 import com.android.android_academy.data.models.MoviesSearchResponse
-import com.android.android_academy.network.Credentials
-import com.android.android_academy.network.MovieApi
-import com.android.android_academy.network.NetworkModule
+import com.android.android_academy.remote.Credentials
+import com.android.android_academy.remote.MovieApi
+import com.android.android_academy.remote.NetworkModule
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

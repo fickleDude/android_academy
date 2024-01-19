@@ -1,4 +1,4 @@
-package com.android.android_academy.network
+package com.android.android_academy.remote
 
 //class with network constants
 open class Credentials{

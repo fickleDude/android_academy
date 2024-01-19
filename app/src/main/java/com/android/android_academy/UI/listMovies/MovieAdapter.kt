@@ -1,21 +1,23 @@
 package com.android.android_academy.UI.listMovies
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.android.android_academy.R
+import com.android.android_academy.data.models.MovieModel
 import com.android.android_academy.domain.Movie
 
 
 class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewHolder>()
  {
-     private var movies = emptyList<Movie>()
+     private var movies = emptyList<MovieModel>()
 
     private var posterFragmentClickListener: PosterListener? = null
 
-    private fun getItem(position:Int): Movie {
+    private fun getItem(position:Int): MovieModel {
         return movies[position]
     }
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -40,7 +42,8 @@ class MovieAdapter(private val context: Context):RecyclerView.Adapter<MovieViewH
          holder.bind(this.context, getItem(position))
      }
 
-     fun bindMovies(newMovies: List<Movie>) {
+     @SuppressLint("NotifyDataSetChanged")
+     fun bindMovies(newMovies: List<MovieModel>) {
          movies = newMovies
          notifyDataSetChanged()
      }

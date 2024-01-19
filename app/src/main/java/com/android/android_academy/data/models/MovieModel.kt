@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 // serialization - converting object into json string (with Gson plugin)
 // deserialization - converting json string into object
 
-//single movie request
+//single movie search request
 //path http://www.omdbapi.com/?apikey=ada59da8&s=Jack Reacher
 //JSON example
 //    {
@@ -28,6 +28,18 @@ data class MovieModel (
      @SerialName("Poster")
      private val Poster : String
 ){
+    fun getTitle() : String{
+        return Title
+    }
+    fun getType() : String{
+        return Type
+    }
+    fun getYear() : String{
+        return Year
+    }
+    fun getPoster() : String{
+        return Poster
+    }
     override fun toString(): String {
         return "MovieModel(Title='$Title', Year='$Year', imdbID='$imdbID', Type='$Type', Poster='$Poster')"
     }

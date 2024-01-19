@@ -1,9 +1,9 @@
-package com.android.android_academy.network
+package com.android.android_academy.remote
 
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+//RETROFIT INSTANCE
 object NetworkModule {
 
     private val retrofitBuilder = Retrofit.Builder()
