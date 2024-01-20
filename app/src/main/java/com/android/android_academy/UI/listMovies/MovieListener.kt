@@ -1,7 +1,7 @@
 package com.android.android_academy.UI.listMovies
 
 interface MovieListener {
-    fun onMovieClick(position : Int){
+    fun onMovieClick(id : String){
 
     }
 //    fun onCategoryClick(id : String){

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -33,13 +35,35 @@ class TestMVVM : AppCompatActivity(), MovieListener {
         //initialize activity view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_mvvm)
+        //configure toolbar
+        val toolbar : Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        //set up search view
+        setUpSearchView()
         //initialize view model
         viewModel = ViewModelProvider(this)[MoviesListViewModel::class.java]
         //initialize recycler view
         configureRecyclerView()
         observeChanges()
+    }
 
-        getMovieSearchList("fast", "1")
+    private fun setUpSearchView(){
+        val searchView : SearchView = findViewById(R.id.search_view)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (query != null) {
+                    //call client api method from Main Activity
+                    viewModel.searchMovieApi(query, "1")
+                    return true
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                return false
+            }
+
+        })
     }
 
 
@@ -58,11 +82,6 @@ class TestMVVM : AppCompatActivity(), MovieListener {
         })
     }
 
-    //call client api method from Main Activity
-    private fun getMovieSearchList(title: String, pageNumber: String) {
-        viewModel.searchMovieApi(title, pageNumber)
-    }
-
     //initialize RecyclerView and add data to it
     fun configureRecyclerView() {
         //intialize RecyclerView with xml component
@@ -77,9 +96,9 @@ class TestMVVM : AppCompatActivity(), MovieListener {
 //        //sent id to movie details layout
 //
 //    }
-    override fun onMovieClick(position: Int) {
-        super.onMovieClick(position)
-        Toast.makeText(this, "POSTER WITH POSITION $position CLICKED", Toast.LENGTH_SHORT).show()
+    override fun onMovieClick(id: String) {
+        super.onMovieClick(id)
+        Toast.makeText(this, "POSTER WITH ID $id CLICKED", Toast.LENGTH_SHORT).show()
     }
 
 }

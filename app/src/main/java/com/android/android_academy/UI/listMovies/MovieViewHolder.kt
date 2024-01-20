@@ -38,7 +38,7 @@ class MovieViewHolder(view : View, private var clickListener : MovieListener) : 
     }
 
     override fun onClick(v: View?) {
-        clickListener.onMovieClick(adapterPosition)
+        clickListener.onMovieClick(movieId)
     }
 
 }
