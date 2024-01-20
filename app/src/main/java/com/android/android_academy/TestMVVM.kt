@@ -90,6 +90,16 @@ class TestMVVM : AppCompatActivity(), MovieListener {
         //adapter will tell how to interpret stored data on each item of RecyclerView
         adapter = MovieAdapter(applicationContext, this)
         recycler?.adapter = adapter
+
+        //recycler view pagination
+        //loading next page of api response
+        recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if(!recyclerView.canScrollVertically(1)){
+                    //need to display new page of request result
+                }
+            }
+        })
     }
 
 //    override fun onImageClick(id: String) {
