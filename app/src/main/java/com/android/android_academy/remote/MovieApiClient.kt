@@ -1,11 +1,13 @@
 package com.android.android_academy.remote
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.android.android_academy.data.models.MovieDetailsModel
 import com.android.android_academy.data.models.MovieModel
 import com.android.android_academy.data.models.MoviesSearchResponse
 import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -13,8 +15,10 @@ import java.util.concurrent.TimeUnit
 class MovieApiClient private constructor(){
 
     private var moviesLiveData : MutableLiveData<List<MovieModel>?> = MutableLiveData(emptyList())
+    private var movieDetails : MutableLiveData<MovieDetailsModel?> = MutableLiveData()
 
     private var moviesSearchListRunnable : RetrieveMoviesRunnable? = null
+    private var moviesMovieDetailsRunnable : RetrieveMovieDetailsRunnable? = null
 
     companion object {
 
@@ -30,7 +34,7 @@ class MovieApiClient private constructor(){
     }
 
 //    implement search by title API
-    fun getMoviesSearchList(title : String, pageNumber : String){
+    fun retrieveMoviesSearchList(title : String, pageNumber : String){
         if(moviesSearchListRunnable != null){
             moviesSearchListRunnable = null
         }
@@ -47,6 +51,31 @@ class MovieApiClient private constructor(){
 
         }, 3000, TimeUnit.MILLISECONDS)
     }
+
+    //    implement search by ID
+    fun retrieveMovieDetails(id : String){
+        if(moviesMovieDetailsRunnable != null){
+            moviesMovieDetailsRunnable = null
+        }
+        //initialize runnable with correct title
+        moviesMovieDetailsRunnable = RetrieveMovieDetailsRunnable(id)
+        //new runnable thread (submit)
+        val handler = AppExecutors.getInstance().networkIO().submit(moviesMovieDetailsRunnable)
+        //set timeout for execution method to avoid crushes (schedule)
+        AppExecutors.getInstance().networkIO().schedule(object : Runnable{
+            //cancelling retrofit call
+            override fun run() {
+                handler.cancel(true)
+            }
+
+        }, 3000, TimeUnit.MILLISECONDS)
+    }
+
+    fun getMovieDetails() : MutableLiveData<MovieDetailsModel?> {
+        return movieDetails
+    }
+
+
 
     //retrieve data from runnable class: search by title & search by id
     inner class RetrieveMoviesRunnable(private val title : String, private val pageNumber : String) : Runnable {
@@ -82,7 +111,7 @@ class MovieApiClient private constructor(){
 
         }
 
-        //get response queue
+        //SEARCH FOR MOVIE LIST
         private fun getMovieSearchList(title : String, pageNumber : String) : Call<MoviesSearchResponse>{
             val movieApi : MovieApi = NetworkModule.getMovieApi()
             val responseQueue : Call<MoviesSearchResponse> = movieApi
@@ -100,4 +129,91 @@ class MovieApiClient private constructor(){
             cancelRequest = true
         }
     }
+
+    //SEARCH FOR MOVIE DETAILS
+    inner class RetrieveMovieDetailsRunnable(private val id : String) : Runnable {
+
+        private var cancelRequest : Boolean = false
+
+        override fun run() {
+            //getting response objects
+            try{
+                val response = getMovieDetails(id).execute()
+                if (cancelRequest){
+                    return
+                }
+
+                if(response.code() == 200){
+                    Log.v("RETROFIT", "Retrofit response " + response.body().toString())
+                    //retrieve data from response
+                    movieDetails.postValue(response.body())
+                }
+                else{
+                    Log.v("RETROFIT", "Retrofit error response " + response.message())
+                    movieDetails.postValue(null)
+                }
+            }catch (e: IOException){
+                Log.v("RETROFIT", "Retrofit on failure response "+e.stackTraceToString())
+                Log.v("RETROFIT", "Retrofit on failure response " + e.message)
+                movieDetails.postValue(null)
+            }
+
+
+
+        }
+
+        //get response queue
+        private fun getMovieDetails(id : String) : Call<MovieDetailsModel>{
+            val movieApi : MovieApi = NetworkModule.getMovieApi()
+            val responseQueue : Call<MovieDetailsModel> = movieApi
+                .searchForMovieDetails(
+                    Credentials().getApiKey(),
+                    id
+                )
+            Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
+            return responseQueue
+        }
+
+        private fun cancelRequest(){
+            Log.v("RETROFIT", "Canceling Retrofit request ")
+            cancelRequest = true
+        }
+    }
+
+
+}
+
+private fun retrieveMovieDetails(id: String) {
+    val movieApi: MovieApi = NetworkModule.getMovieApi()
+    val responseQueue: Call<MovieDetailsModel> = movieApi
+        .searchForMovieDetails(
+            Credentials().getApiKey(),
+            id
+        )
+    Log.v("RETROFIT", "Retrofit request " + responseQueue.request().url)
+
+    //asynchronous call(non blocking)
+    responseQueue.enqueue(object : Callback<MovieDetailsModel> {
+        override fun onResponse(
+            call: Call<MovieDetailsModel>,
+            response: Response<MovieDetailsModel>
+        ) {
+            if (response.code() == 200) {
+                Log.v("RETROFIT", "Retrofit response " + response.body().toString())
+                Log.v("RETROFIT", ("Movie Model Title " + response.body()?.Title))
+            } else {
+                try {
+                    Log.v("RETROFIT", "Retrofit error response " + response.message())
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }
+
+        override fun onFailure(call: Call<MovieDetailsModel>, t: Throwable) {
+            Log.v("RETROFIT", "Retrofit on failure response" + t.stackTraceToString())
+            t.printStackTrace()
+        }
+
+    })
 }

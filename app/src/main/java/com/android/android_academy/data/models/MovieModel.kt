@@ -1,4 +1,6 @@
 package com.android.android_academy.data.models
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +17,7 @@ import kotlinx.serialization.Serializable
 //        "Type": "movie",
 //        "Poster": "https://m.media-amazon.com/images/M/MV5BMTM1NjUxMDI3OV5BMl5BanBnXkFtZTcwNjg1ODM3OA@@._V1_SX300.jpg"
 //    }
-@Serializable
+@Parcelize
 data class MovieModel (
     @SerialName("Title")
      private val Title : String,
@@ -27,7 +29,7 @@ data class MovieModel (
      private val Type : String,
      @SerialName("Poster")
      private val Poster : String
-){
+) : Parcelable {
     fun getId() : String{
         return imdbID
     }

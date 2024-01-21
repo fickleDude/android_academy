@@ -12,7 +12,7 @@ import com.bumptech.glide.Glide
 import java.util.Random
 
 //holds MovieModel(Title, Year, imdbID, Type, Poster)
-class MovieViewHolder(view : View, private var clickListener : MovieListener) : RecyclerView.ViewHolder(view), View.OnClickListener{
+class MovieViewHolder(view : View) : RecyclerView.ViewHolder(view){
     //movie_list_item widgets
     private val title : TextView = view.findViewById(R.id.movie_title)
     private val type : TextView = view.findViewById(R.id.movie_type)
@@ -32,13 +32,5 @@ class MovieViewHolder(view : View, private var clickListener : MovieListener) : 
         ratingBar.rating = Random().nextInt(5).toFloat()
 
         Glide.with(context).load(movie.getPoster()).into(poster)
-
-        //set click listener
-        itemView.setOnClickListener(this)
     }
-
-    override fun onClick(v: View?) {
-        clickListener.onMovieClick(movieId)
-    }
-
 }

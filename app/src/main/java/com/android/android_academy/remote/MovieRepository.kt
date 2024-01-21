@@ -1,7 +1,7 @@
 package com.android.android_academy.remote
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.android.android_academy.data.models.MovieDetailsModel
 import com.android.android_academy.data.models.MovieModel
 
 
@@ -13,6 +13,11 @@ import com.android.android_academy.data.models.MovieModel
 
 //Repository gets data from remote source via API
 class MovieRepository private constructor(){
+
+    //for next page of request
+    private lateinit var query : String
+    private lateinit var pageNumber : String
+
 
     private val client : MovieApiClient = MovieApiClient.getInstance()
 
@@ -31,8 +36,24 @@ class MovieRepository private constructor(){
         return  client.getMovies()
     }
 
+    fun getMovieDetails(): MutableLiveData<MovieDetailsModel?> {
+        //client connects to remote DB and gets data according to request
+        return  client.getMovieDetails()
+    }
+
     //calling client api method on the background
-    fun searchMovieApi(title : String, pageNumber : String){
-        client.getMoviesSearchList(title, pageNumber)
+    fun searchMovieByTitleApi(title : String, pageNumber : String){
+        query = title
+        this.pageNumber = pageNumber
+        client.retrieveMoviesSearchList(title, pageNumber)
+    }
+
+    //calling client api method on the background
+    fun searchMovieByIdApi(id : String){
+        client.retrieveMovieDetails(id)
+    }
+
+    fun searchNextPage(){
+        searchMovieByTitleApi(query, (pageNumber.toInt()+1).toString())
     }
 }

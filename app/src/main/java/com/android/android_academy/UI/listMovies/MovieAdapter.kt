@@ -10,14 +10,16 @@ import com.android.android_academy.R
 import com.android.android_academy.data.models.MovieModel
 
 
-class MovieAdapter(private val context: Context, private var clickListener : MovieListener):RecyclerView.Adapter<MovieViewHolder>()
+class MovieAdapter(private val context: Context, private var clickListener : MovieListener):RecyclerView.Adapter<MovieViewHolder>(), View.OnClickListener
  {
      private var movies = emptyList<MovieModel>()
+     private lateinit var holder : MovieViewHolder
 
-//    private var posterFragmentOnMovieListener: onMovieListener? = null
-
-    private fun getItem(position:Int): MovieModel {
-        return movies[position]
+    fun getItem(position:Int): MovieModel? {
+        if(movies.size > position){
+            return movies[position]
+        }
+        return null
     }
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
          //identify correct view
@@ -25,14 +27,9 @@ class MovieAdapter(private val context: Context, private var clickListener : Mov
              R.layout.movie_list_item,
              parent,false)
 
-//         posterFragmentOnMovieListener = view.context as onMovieListener
-//         view?.findViewById<View>(R.id.movie_img)?.apply {
-//             setOnClickListener{
-//                 posterFragmentOnMovieListener?.onPosterClickedSendId()
-//             }
-//
-//        }
-         return MovieViewHolder(view, clickListener)
+         holder = MovieViewHolder(view)
+         holder.itemView.setOnClickListener(this)
+         return holder
      }
 
      override fun getItemCount(): Int {
@@ -40,13 +37,17 @@ class MovieAdapter(private val context: Context, private var clickListener : Mov
      }
 
      override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
-         holder.bind(this.context, getItem(position))
+         getItem(position)?.let { holder.bind(this.context, it) }
      }
 
      @SuppressLint("NotifyDataSetChanged")
      fun setMovies(newMovies: List<MovieModel>) {
          movies = newMovies
          notifyDataSetChanged()
+     }
+
+     override fun onClick(v: View?) {
+         clickListener.onMovieClick(holder.adapterPosition)
      }
 
 

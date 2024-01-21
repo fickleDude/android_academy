@@ -27,6 +27,20 @@ data class MovieDetailsModel(
     val imdbRating: String?,
     val Plot: String?
 ) : Parcelable {
+
+//    fun getTitle() : String?{
+//        return Title
+//    }
+//    fun getPoster() : String?{
+//        return Poster
+//    }
+//    fun getRating() : String?{
+//        return imdbRating
+//    }
+//    fun getPlot() : String?{
+//        return Plot
+//    }
+
     override fun toString(): String {
         return "MovieModel(Title=$Title, Poster=$Poster, Released=$Released, imdbID=$imdbID, imdbRating=$imdbRating, Plot=$Plot)"
     }
