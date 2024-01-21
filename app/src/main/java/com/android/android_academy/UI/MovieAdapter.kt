@@ -1,4 +1,4 @@
-package com.android.android_academy.UI.listMovies
+package com.android.android_academy.UI
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -15,12 +15,13 @@ class MovieAdapter(private val context: Context, private var clickListener : Mov
      private var movies = emptyList<MovieModel>()
      private lateinit var holder : MovieViewHolder
 
-    fun getItem(position:Int): MovieModel? {
-        if(movies.size > position){
-            return movies[position]
-        }
-        return null
-    }
+     //for switching between views
+     companion object{
+         const val DISPLAY_POP : Int = 1
+         const val DISPLAY_SEARCH : Int = 2
+     }
+
+
      override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
          //identify correct view
          val view = LayoutInflater.from(parent.context).inflate(
@@ -35,7 +36,12 @@ class MovieAdapter(private val context: Context, private var clickListener : Mov
      override fun getItemCount(): Int {
          return movies.size
      }
-
+     fun getItem(position:Int): MovieModel? {
+         if(movies.size > position){
+             return movies[position]
+         }
+         return null
+     }
      override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
          getItem(position)?.let { holder.bind(this.context, it) }
      }
@@ -49,6 +55,4 @@ class MovieAdapter(private val context: Context, private var clickListener : Mov
      override fun onClick(v: View?) {
          clickListener.onMovieClick(holder.adapterPosition)
      }
-
-
  }

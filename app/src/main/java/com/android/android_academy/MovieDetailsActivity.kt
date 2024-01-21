@@ -2,18 +2,15 @@ package com.android.android_academy
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.android.android_academy.UI.list.MoviesListViewModel
+import com.android.android_academy.UI.MoviesListViewModel
 import com.android.android_academy.data.models.MovieDetailsModel
 import com.android.android_academy.data.models.MovieModel
 import com.bumptech.glide.Glide
-import java.util.Random
 
 class MovieDetailsActivity : AppCompatActivity() {
     //widgets

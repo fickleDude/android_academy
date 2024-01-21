@@ -4,14 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.android.android_academy.UI.list.MoviesListViewModel
-import com.android.android_academy.UI.listMovies.MovieAdapter
-import com.android.android_academy.UI.listMovies.MovieListener
+import com.android.android_academy.UI.MoviesListViewModel
+import com.android.android_academy.UI.MovieAdapter
+import com.android.android_academy.UI.MovieListener
 import com.android.android_academy.data.models.MovieModel
 
 class MovieListActivity : AppCompatActivity(), MovieListener {
@@ -23,10 +24,12 @@ class MovieListActivity : AppCompatActivity(), MovieListener {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter : MovieAdapter
 
+    private var isPopular : Boolean = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         //initialize activity view
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test_mvvm)
+        setContentView(R.layout.activity_movie_list)
         //configure toolbar
         val toolbar : Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -36,7 +39,11 @@ class MovieListActivity : AppCompatActivity(), MovieListener {
         viewModel = ViewModelProvider(this)[MoviesListViewModel::class.java]
         //initialize recycler view
         configureRecyclerView()
-        observeChanges()
+        observeListChanges()
+        observePopularChanges()
+
+        //get data for popular movies
+        viewModel.searchPopularMovies("1")
 
     }
 
@@ -57,11 +64,18 @@ class MovieListActivity : AppCompatActivity(), MovieListener {
             }
 
         })
+        //use to switch view from popular to list
+        searchView.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                isPopular = false
+            }
+
+        })
     }
 
 
     //create observer
-    private fun observeChanges() {
+    private fun observeListChanges() {
         viewModel.getMovies().observe(this, object : Observer<List<MovieModel>?> {
             override fun onChanged(value: List<MovieModel>?) {
                 if (value != null) {
@@ -75,8 +89,22 @@ class MovieListActivity : AppCompatActivity(), MovieListener {
         })
     }
 
+    private fun observePopularChanges() {
+        viewModel.getPopularMovies().observe(this, object : Observer<List<MovieModel>?> {
+            override fun onChanged(value: List<MovieModel>?) {
+                if (value != null && isPopular) {
+                    for (movie: MovieModel in value) {
+                        Log.v("RETROFIT", ("Movie Model $movie"))
+                        adapter.setMovies(value)
+                    }
+                }
+            }
+
+        })
+    }
+
     //initialize RecyclerView and add data to it
-    fun configureRecyclerView() {
+    private fun configureRecyclerView() {
         //intialize RecyclerView with xml component
         recycler = findViewById(R.id.movie_list)
         //intialize adapter for RecyclerView
@@ -101,9 +129,6 @@ class MovieListActivity : AppCompatActivity(), MovieListener {
         val intent = Intent(this, MovieDetailsActivity::class.java)
         intent.putExtra("movie", adapter.getItem(position))
         startActivity(intent)
-
-//        super.onMovieClick(id)
-//        Toast.makeText(this, "POSTER WITH ID $id CLICKED", Toast.LENGTH_SHORT).show()
     }
 
 }

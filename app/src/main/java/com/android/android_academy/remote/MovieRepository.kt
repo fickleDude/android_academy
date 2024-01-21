@@ -14,7 +14,7 @@ import com.android.android_academy.data.models.MovieModel
 //Repository gets data from remote source via API
 class MovieRepository private constructor(){
 
-    //for next page of request
+    //for next page of request(RecyclerView Pagination)
     private lateinit var query : String
     private lateinit var pageNumber : String
 
@@ -31,9 +31,14 @@ class MovieRepository private constructor(){
             }
     }
 
-    fun getMovies(): MutableLiveData<List<MovieModel>?> {
+    fun getMoviesList(): MutableLiveData<List<MovieModel>?> {
         //client connects to remote DB and gets data according to request
         return  client.getMovies()
+    }
+
+    fun getPopularMovies(): MutableLiveData<List<MovieModel>?> {
+        //client connects to remote DB and gets data according to request
+        return  client.getPopularMovies()
     }
 
     fun getMovieDetails(): MutableLiveData<MovieDetailsModel?> {
@@ -48,11 +53,16 @@ class MovieRepository private constructor(){
         client.retrieveMoviesSearchList(title, pageNumber)
     }
 
+    fun searchPopularMovies(pageNumber : String){
+        client.retrievePopularMovies(pageNumber)
+    }
+
     //calling client api method on the background
     fun searchMovieByIdApi(id : String){
         client.retrieveMovieDetails(id)
     }
 
+//    RecyclerView Pagination
     fun searchNextPage(){
         searchMovieByTitleApi(query, (pageNumber.toInt()+1).toString())
     }

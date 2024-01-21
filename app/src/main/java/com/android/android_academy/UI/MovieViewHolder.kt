@@ -1,4 +1,4 @@
-package com.android.android_academy.UI.listMovies
+package com.android.android_academy.UI
 
 import android.content.Context
 import android.view.View

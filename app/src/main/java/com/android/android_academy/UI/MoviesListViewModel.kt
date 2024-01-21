@@ -1,4 +1,4 @@
-package com.android.android_academy.UI.list
+package com.android.android_academy.UI
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -15,7 +15,12 @@ class MoviesListViewModel(
 
     fun getMovies():LiveData<List<MovieModel>?>{
         //get access to data via repository which uses API to connect to remote DB
-        return  repository.getMovies()
+        return  repository.getMoviesList()
+    }
+
+    fun getPopularMovies():LiveData<List<MovieModel>?>{
+        //get access to data via repository which uses API to connect to remote DB
+        return  repository.getPopularMovies()
     }
 
     fun getMovieDetails():LiveData<MovieDetailsModel?>{
@@ -26,6 +31,10 @@ class MoviesListViewModel(
     //calling repository method which calls client api method
     fun searchByTitleMovieApi(title : String, pageNumber : String){
         repository.searchMovieByTitleApi(title, pageNumber)
+    }
+
+    fun searchPopularMovies(pageNumber : String){
+        repository.searchPopularMovies(pageNumber)
     }
 
     fun searchByIdMovieApi(id : String){
